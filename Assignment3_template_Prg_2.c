@@ -35,6 +35,8 @@ int main(int argc, char* argv[])
 {
 	//Register Ctrl+c(SIGINT) signal and call the signal handler for the function.
 	//add your code here
+	typedef unsigned int uint;
+	signal(SIGINT, SignalHandler);
 	
         int i;
 	// reference number
@@ -62,6 +64,43 @@ int main(int argc, char* argv[])
 	for(i = 0; i < REFERENCESTRINGLENGTH; i++)
 	{
 		//add your code here
+		int j;
+		currentValue = referenceString[i];
+		match = false;
+
+		for(j = 0; j < frameSize; j++)
+		{
+			if(frame[j] == currentValue)
+			{
+				match = true;
+			}
+		}
+
+		if(match == false)
+		{
+		pageFaults = pageFaults + 1;
+		frame[nextWritePosition] = currentValue;
+		
+		 nextWritePosition = nextWritePosition + 1;
+			if(nextWritePosition == frameSize)
+			{
+				nextWritePosition = 0;
+			}
+		}
+
+		printf("Reference: %d | Frame: ", currentValue);
+		for(j = 0; j < frameSize; j++)
+		{
+			if(frame[j] == -1)
+			{
+				printf("- ");
+			}
+			else
+			{
+				printf("%d ", frame[j]);
+			}
+		}
+		printf("| Page Faults: %d\n", pageFaults);
 		
 	}
 
